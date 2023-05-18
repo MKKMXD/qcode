@@ -3,8 +3,8 @@ namespace QCode\Render;
 
 abstract class AbstractRender implements IRender
 {
-    public function render(): void
+    public function render($list): Render
     {
-        
+        return $this;
     }
 }

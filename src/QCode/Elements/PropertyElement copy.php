@@ -4,10 +4,9 @@ namespace QCode\Elements;
 final class PropertyElement extends Element
 {
     protected array $fields = [
-        'name',
-        'default',
-        'type',
         'modifier',
+        'type',
+        'name',
     ];
 
     protected array $values;

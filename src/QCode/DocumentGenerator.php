@@ -1,7 +1,4 @@
 <?php
-
-require_once 'vendor\autoload.php';
-
 namespace QCode;
 use QCode\Finder\ClassesFinder;
 use QCode\Finder\Finder;
@@ -15,6 +12,7 @@ final class DocumentGenerator
 {
     private Finder $finder; 
     private Parser $parser; 
+    private Render $render; 
     private string $inDir; 
 
     public function __construct($inDir)
@@ -30,18 +28,29 @@ final class DocumentGenerator
     {
         $files = $this->getFiles($this->inDir);
         //Add search objects
-        $this->finder->addFinder(new PropertiesFinder());
-        $this->finder->addFinder(new ClassesFinder());
-        $this->finder->addFinder(new MethodsFinder());
+        $this->finder->addFinder(new PropertiesFinder())
+            ->addFinder(new ClassesFinder())
+            ->addFinder(new MethodsFinder());
 
+        $result = [];
+        $mdText = "";
         foreach ($files as $file) {
-            $code = file_get_contents($file->getPathName());
+            $code = file_get_contents($file->getPathName());            
             $stmts = $this->parser->parse($code);
-
+            
+            echo '<pre>';
+            var_dump($stmts);
+            echo '</pre>';
             $result = $this->finder->search($stmts);
+            $mdText .= $this->render->render($result)
+            ->getText();
         }
 
-        return $result;
+         
+        file_put_contents(
+            __DIR__ . "/Test/result.md",
+            $mdText
+        );
     }
 
     private function getFiles($inDir): \RegexIterator

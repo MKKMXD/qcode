@@ -18,8 +18,10 @@ class Finder extends AbstractFinder
         return $result;
     }
 
-    public function addFinder(IFinder $finder): void
+    public function addFinder(IFinder $finder): Finder
     {
         $this->elements[] = $finder;
+
+        return $this;
     }
 }

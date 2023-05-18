@@ -4,13 +4,13 @@ use PhpParser\NodeFinder;
 
 abstract class AbstractFinder implements IFinder
 {
-    private string $nodeName = "";
+    protected string $nodeName = "";
     
     private NodeFinder $finder;
 
     public function getFinder(): NodeFinder
     {
-        if (!$this->finder) {
+        if (!isset($this->finder)) {
             $this->finder = new NodeFinder();
         }
 
@@ -20,7 +20,6 @@ abstract class AbstractFinder implements IFinder
     public function search($stmts): array
     {
         $finder = $this->getFinder();
-
         $elements = $finder->findInstanceOf($stmts, $this->nodeName);
         $nodes = $this->collectNodes($elements);
 

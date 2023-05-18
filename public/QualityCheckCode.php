@@ -1,0 +1,74 @@
+- public  $finder = "null"
+- public  $parser = "null"
+- public  $render = "null"
+- public string $inDir = "null"
+- Finder()
+- Render()
+- ParserFactory()
+- PropertiesFinder()
+- ClassesFinder()
+- MethodsFinder()
+- RecursiveIteratorIterator()
+- RecursiveDirectoryIterator()
+- RegexIterator()
+- __construct( $inDir = ): 
+- generate( $toDir = ): 
+- getFiles( $inDir = ): 
+- public array $fields = "null"
+- public array $values = "null"
+- public string $viewName = "null"
+- public array $fields = "null"
+- public array $values = "null"
+- public string $viewName = "null"
+- public  $render = "null"
+- Render()
+- __construct( $data = ): 
+- render(): 1
+- public array $fields = "null"
+- public array $values = "null"
+- public string $viewName = "null"
+- public array $fields = "null"
+- public array $values = "null"
+- public string $viewName = "null"
+- public array $fields = "null"
+- public array $values = "null"
+- public string $viewName = "null"
+- public array $fields = "null"
+- public array $values = "null"
+- public string $viewName = "null"
+- public string $nodeName = "null"
+- public  $finder = "null"
+- NodeFinder()
+- getFinder(): 
+- search( $stmts = ): 1
+- collectNodes( $elements = ): 1
+- public string $nodeName = "null"
+- ClassElement()
+- collectNodes( $elements = ): 1
+- public array $elements = "null"
+- search( $stmts = ): 1
+- addFinder(IFinder $finder = ): 
+- search( $stmts = ): 1
+- collectNodes( $elements = ): 1
+- public string $nodeName = "null"
+- MethodElement()
+- ParamsElement()
+- collectNodes( $elements = ): 1
+- collectParams( $params = ): 
+- public string $nodeName = "null"
+- PropertyElement()
+- collectNodes( $elements = ): 1
+- public string $nodeName = "null"
+- PropertyElement()
+- collectNodes( $elements = ): 1
+- public  $nodeFinder = "null"
+- public  $prettyPrinter = "null"
+- public  $parser = "null"
+- public string $inDir = "null"
+- ParserFactory()
+- PrettyPrinter_Standard()
+- NodeFinder()
+- RecursiveIteratorIterator()
+- RecursiveDirectoryIterator()
+- RegexIterator()
+- __construct(): 
