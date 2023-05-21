@@ -37,6 +37,7 @@ final class DocumentGenerator
 
         $result = [];
         $mdText = "";
+        echo "<pre>";
         foreach ($files as $file) {
             $code = file_get_contents($file->getPathName());            
             $stmts = $this->parser->parse($code);
@@ -44,12 +45,18 @@ final class DocumentGenerator
             $mdText = $this->render->render($result)
                 ->getText();
             $this->render->reset();
+            $dirPath = __DIR__ . "/Test/" . str_replace([$this->inDir, "\\"], "", $file->getPath());
+            var_dump($dirPath . "/" . $file->getBasename('.php') . ".md");
+            if (!is_dir($dirPath)) {
+                mkdir($dirPath, 0777, true);
+            }
             file_put_contents(
-                __DIR__ . "/Test/" . str_replace("php", "md", $file->getBasename()),
+                $dirPath . "/" . $file->getBasename('.php') . ".md",
                 $mdText
             );
             $mdText = "";
         }
+        echo "</pre>";
         /*file_put_contents(
                 __DIR__ . "/Test/result.md",
                 $mdText
