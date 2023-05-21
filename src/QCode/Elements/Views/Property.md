@@ -1,1 +1,1 @@
-- {modifier} {type} ${name} = "{default}"
+- {modifier} {type} ${name} = {default}

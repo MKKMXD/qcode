@@ -8,7 +8,7 @@ interface IFinder
      * @param PHPParser\Node|PHPParser\Node[] $stmts
      * @return array
      */
-    public function search($stmts): array;
+    public function search($stmts, $groupLine = null): array;
 
-    public function collectNodes($elements): array;
+    public function collectNodes(array $elements, array $findDepedencies = []): array;
 }

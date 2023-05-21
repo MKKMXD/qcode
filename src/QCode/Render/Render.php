@@ -14,7 +14,12 @@ final class Render extends AbstractRender
             if (is_array($element)) {
                 $this->render($element);
             } else {
-                $this->pageText .= $element->render();
+                if (is_object($element)) {
+                    $this->pageText .= $element->render();
+                } else {
+                    $this->pageText .= $element;
+                }
+               
             }
         }
 

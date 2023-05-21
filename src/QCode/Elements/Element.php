@@ -31,8 +31,8 @@ abstract class Element
         if (!$file) {
             return "";
         }
-
         foreach ($this->values as $key => $value) {
+            $this->render = new Render();
             if (is_array($value)) {
                 $val = $this->render->render($value)
                     ->getText();

@@ -9,7 +9,7 @@ final class ClassesFinder extends AbstractFinder
 {
     protected string $nodeName = \PhpParser\Node\Expr\New_::class;
 
-    public function collectNodes($elements): array
+    public function collectNodes($elements, $findDepedencies = []): array
     {
         $list = [];
         foreach ($elements as $prop) {

@@ -5,8 +5,17 @@ use PhpParser\NodeFinder;
 abstract class AbstractFinder implements IFinder
 {
     protected string $nodeName = "";
+
+    protected array $dependencies = [];
+    
+    protected array $findDepedencies = [];
     
     private NodeFinder $finder;
+
+    public function __construct()
+    {
+        
+    }
 
     public function getFinder(): NodeFinder
     {
@@ -17,16 +26,50 @@ abstract class AbstractFinder implements IFinder
         return $this->finder;
     }
     
-    public function search($stmts): array
+    public function search($stmts, $groupLine = null): array
     {
-        $finder = $this->getFinder();
-        $elements = $finder->findInstanceOf($stmts, $this->nodeName);
-        $nodes = $this->collectNodes($elements);
+        $newElements = [];
+        if ($stmts) {
+            $finder = $this->getFinder();
+            $elements = $finder->findInstanceOf($stmts, $this->nodeName);
+            $elements = $this->filter($elements, $groupLine);
+            $findDepedencies = [];
+            foreach ($elements as $key => &$element) {
+                $line = $element->getLine();
+                $newElements[$line] = $element;
+                    
+                if (!empty($this->dependencies)) {
+                    $findDepedencies[$line] = [];
+                    foreach ($this->dependencies as $keyDependency => $dependency) {
+                        if (is_array($dependency)) {
+                            $findDepedencies[$line][$keyDependency] = [];
+                            foreach ($dependency as $keyElem => $elem) {
+                                $findDepedencies[$line][$keyDependency][$keyElem] = $elem->search($stmts, $line);
+                            }
+                        } else {
+                            $findDepedencies[$line][$keyDependency] = $dependency->search($stmts, $line);
+                        }
+                    }
+                }
+            }
+        }
+
+        $nodes = $this->collectNodes($newElements, $findDepedencies);
 
         return $nodes;
     }
 
-    public function collectNodes($elements): array
+    public function filter($elements, $groupLine)
+    {
+        if (is_null($groupLine)) return $elements;
+        $elements = array_filter($elements, function($elem) use ($groupLine) {
+            if ($elem->getLine() == $groupLine) return $elem;
+        });
+
+        return $elements;
+    }
+
+    public function collectNodes(array $elements, array $findDepedencies = []): array
     {
         return [];
     }
