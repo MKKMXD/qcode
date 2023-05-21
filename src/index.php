@@ -6,5 +6,5 @@ spl_autoload_register(function ($class) {
 });
 use QCode\DocumentGenerator;
 
-$dg = new DocumentGenerator("C:/Web/www/qcode/src/QCode");
-$dg->generate("C:/Web/www/qcode/public");
+$dg = new DocumentGenerator("C:/OSPanel/domains/Qcode/src/QCode");
+$dg->generate("C:/OSPanel/domains/Qcode/src/QCode/Test");

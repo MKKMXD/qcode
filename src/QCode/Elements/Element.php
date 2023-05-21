@@ -8,40 +8,48 @@ abstract class Element
 {
     protected array $fields = [];
 
-    protected array $values = [];
+    protected array $values= [];
 
     protected string $viewName="";
+
     protected Render $render;
 
-    public function __construct($data)
+    public function __construct(array $values)
     {
-        foreach ($this->fields as $field) {
-            $this->values[$field] = "";
-            if (isset($data[$field])) {
-                $this->values[$field] = $data[$field];
-            } 
-        }
+        $this->values = $values;
         $this->render = new Render();
     }
 
     public function render(): string
     {
-        $file = file_get_contents(__DIR__ . "/Views/$this->viewName");
+        $content = file_get_contents(__DIR__ . "/Views/$this->viewName");
 
-        if (!$file) {
+        if (!$content) {
             return "";
         }
-        foreach ($this->values as $key => $value) {
-            $this->render = new Render();
-            if (is_array($value)) {
-                $val = $this->render->render($value)
-                    ->getText();
-                $file = str_replace("{{$key}}", $val, $file);
-            } else {
-                $file = str_replace("{{$key}}", $value, $file);
-            }
+        
+        $string = "";
+        foreach ($this->values as $value) {
+            if (is_object($value)) $string .= $this->prepareElementRender($value->render());
+            else $string .= $this->prepareElementRender($value);
         }
 
-        return $file;
+        $string = str_replace(array("{", "}", "\n"), "", $string);
+
+        $content = str_replace("{content}", $string, $content);
+
+        return $content;
+    }
+
+    protected function prepareElementRender(string $content)
+    {
+        return $content;
+    }
+
+    public function setValue(array $values)
+    {
+        $this->values = $values;
+
+        return $this;
     }
 }

@@ -29,4 +29,9 @@ final class Render extends AbstractRender
     public function getText() {
         return $this->pageText;
     }
+
+    public function reset()
+    {
+        $this->pageText = "";
+    }
 }

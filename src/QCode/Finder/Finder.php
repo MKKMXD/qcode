@@ -6,13 +6,13 @@ class Finder extends AbstractFinder
 {
     private array $elements = [];
 
-    public function search($stmts, $groupLine = null): array
+    public function search($stmts): array
     {
         $result = [];
 
         foreach ($this->elements as $element)
         {
-            $result[] = $element->search($stmts, null);
+            $result[] = $element->search($stmts);
         }
 
         return $result;

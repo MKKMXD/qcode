@@ -5,6 +5,7 @@ use QCode\Finder\Finder;
 use QCode\Render\Render;
 use QCode\Finder\MethodsFinder;
 use QCode\Finder\PropertiesFinder;
+use QCode\Finder\ClassFinder;
 use PhpParser\ParserFactory;
 use PhpParser\Parser;
 
@@ -29,27 +30,34 @@ final class DocumentGenerator
     {
         $files = $this->getFiles($this->inDir);
         //Add search objects
-        $this->finder->addFinder(new PropertiesFinder());
+        $this->finder->addFinder(new ClassFinder())
+            ->addFinder(new PropertiesFinder())
+            ->addFinder(new MethodsFinder())
+            ->addFinder(new ClassesFinder());
 
         $result = [];
         $mdText = "";
-        echo '<pre>';
         foreach ($files as $file) {
             $code = file_get_contents($file->getPathName());            
             $stmts = $this->parser->parse($code);
-
             $result = $this->finder->search($stmts);
-            $mdText .= $this->render->render($result)
+            $mdText = $this->render->render($result)
                 ->getText();
-            break;
+            $this->render->reset();
+            file_put_contents(
+                __DIR__ . "/Test/" . str_replace("php", "md", $file->getBasename()),
+                $mdText
+            );
+            $mdText = "";
         }
-
-         
-        echo '</pre>';
-        file_put_contents(
-            __DIR__ . "/Test/result.md",
+        /*file_put_contents(
+                __DIR__ . "/Test/result.md",
+                $mdText
+            );*/
+        /*file_put_contents(
+            __DIR__ . "/Test/" . str_replace("/", "_", $file->getPathName(),
             $mdText
-        );
+        );*/
     }
 
     private function getFiles($inDir): \RegexIterator

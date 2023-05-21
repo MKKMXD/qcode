@@ -1,16 +1,16 @@
 <?php
 namespace QCode\Finder;
 use PhpParser\NodeFinder;
+use PhpParser\PrettyPrinter\Standard;
+use Qcode\Elements\Element;
 
 abstract class AbstractFinder implements IFinder
 {
     protected string $nodeName = "";
-
-    protected array $dependencies = [];
-    
-    protected array $findDepedencies = [];
     
     private NodeFinder $finder;
+
+    protected string $element;
 
     public function __construct()
     {
@@ -26,51 +26,32 @@ abstract class AbstractFinder implements IFinder
         return $this->finder;
     }
     
-    public function search($stmts, $groupLine = null): array
+    public function search($stmts): array
     {
-        $newElements = [];
+        $nodes = [];
         if ($stmts) {
             $finder = $this->getFinder();
             $elements = $finder->findInstanceOf($stmts, $this->nodeName);
-            $elements = $this->filter($elements, $groupLine);
-            $findDepedencies = [];
-            foreach ($elements as $key => &$element) {
-                $line = $element->getLine();
-                $newElements[$line] = $element;
-                    
-                if (!empty($this->dependencies)) {
-                    $findDepedencies[$line] = [];
-                    foreach ($this->dependencies as $keyDependency => $dependency) {
-                        if (is_array($dependency)) {
-                            $findDepedencies[$line][$keyDependency] = [];
-                            foreach ($dependency as $keyElem => $elem) {
-                                $findDepedencies[$line][$keyDependency][$keyElem] = $elem->search($stmts, $line);
-                            }
-                        } else {
-                            $findDepedencies[$line][$keyDependency] = $dependency->search($stmts, $line);
-                        }
-                    }
-                }
+            $prettyPrinter = new Standard;
+            foreach ($elements as $key => $element) {
+                $newElement = clone $element;
+                $newElement->stmts = [];
+                $nodes[] = $this->prepareNode($prettyPrinter->prettyPrint([$newElement]));
             }
         }
 
-        $nodes = $this->collectNodes($newElements, $findDepedencies);
+        $nodes = $this->prepareNodes($nodes);
 
         return $nodes;
     }
 
-    public function filter($elements, $groupLine)
+    protected function prepareNode(string $value)
     {
-        if (is_null($groupLine)) return $elements;
-        $elements = array_filter($elements, function($elem) use ($groupLine) {
-            if ($elem->getLine() == $groupLine) return $elem;
-        });
-
-        return $elements;
+        return $value;
     }
 
-    public function collectNodes(array $elements, array $findDepedencies = []): array
+    public function prepareNodes(array $nodes): array
     {
-        return [];
+        return $nodes;
     }
 }
