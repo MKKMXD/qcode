@@ -27,17 +27,16 @@ abstract class Element
         if (!$content) {
             return "";
         }
-        
-        $string = "";
-        foreach ($this->values as $value) {
-            if (is_object($value)) $string .= $this->prepareElementRender($value->render());
-            else $string .= $this->prepareElementRender($value);
+
+        foreach ($this->values as $key => $value) {
+            if (is_object($value)) $this->values[$key] = $this->prepareElementRender($value->render());
+            else $this->values[$key] = $this->prepareElementRender($value);
         }
-
-        $string = str_replace(array("{", "}", "\n"), "", $string);
-
-        $content = str_replace("{content}", $string, $content);
-
+        
+        foreach ($this->values as $key => $value) {
+            $string = str_replace(array("{", "}"), "", $value);
+            $content = str_replace("{{$key}}", $string, $content);
+        }
         return $content;
     }
 

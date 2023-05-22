@@ -32,11 +32,10 @@ abstract class AbstractFinder implements IFinder
         if ($stmts) {
             $finder = $this->getFinder();
             $elements = $finder->findInstanceOf($stmts, $this->nodeName);
-            $prettyPrinter = new Standard;
+            
             foreach ($elements as $key => $element) {
                 $newElement = clone $element;
-                $newElement->stmts = [];
-                $nodes[] = $this->prepareNode($prettyPrinter->prettyPrint([$newElement]));
+                $nodes[] = $this->prepareNode($newElement);
             }
         }
 
@@ -45,9 +44,17 @@ abstract class AbstractFinder implements IFinder
         return $nodes;
     }
 
-    protected function prepareNode(string $value)
+    protected function prepareNode($value)
     {
-        return $value;
+        $value->stmts = [];
+        $comment = $value->getDocComment();
+        $value->setDocComment(new \PhpParser\Comment\Doc(""));
+        $prettyPrinter = new Standard;
+        
+        return [
+            'comment' => $comment->getText(),
+            'content' => $prettyPrinter->prettyPrint([$value]),
+        ];
     }
 
     public function prepareNodes(array $nodes): array

@@ -8,7 +8,11 @@ use QCode\Finder\PropertiesFinder;
 use QCode\Finder\ClassFinder;
 use PhpParser\ParserFactory;
 use PhpParser\Parser;
-
+/**
+ * Hello man!
+ * 
+ * 
+ */
 final class DocumentGenerator
 {
     private Finder $finder; 
@@ -30,10 +34,10 @@ final class DocumentGenerator
     {
         $files = $this->getFiles($this->inDir);
         //Add search objects
-        $this->finder->addFinder(new ClassFinder())
-            ->addFinder(new PropertiesFinder())
-            ->addFinder(new MethodsFinder())
-            ->addFinder(new ClassesFinder());
+        $this->finder->addFinder(new ClassFinder());
+            //->addFinder(new PropertiesFinder())
+            //->addFinder(new MethodsFinder())
+            //->addFinder(new ClassesFinder());
 
         $result = [];
         $mdText = "";
@@ -55,6 +59,7 @@ final class DocumentGenerator
                 $mdText
             );
             $mdText = "";
+            break;
         }
         echo "</pre>";
         /*file_put_contents(
