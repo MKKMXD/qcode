@@ -45,6 +45,7 @@ final class DocumentGenerator
         foreach ($files as $file) {
             $code = file_get_contents($file->getPathName());            
             $stmts = $this->parser->parse($code);
+            $this->finder->setPathFile($file->getPathName());
             $result = $this->finder->search($stmts);
             $mdText = $this->render->render($result)
                 ->getText();

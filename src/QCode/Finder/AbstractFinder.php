@@ -12,9 +12,11 @@ abstract class AbstractFinder implements IFinder
 
     protected string $element;
 
+    protected string $pathFile;
+
     public function __construct()
     {
-        
+        $this->pathFile = "";
     }
 
     public function getFinder(): NodeFinder
@@ -60,5 +62,10 @@ abstract class AbstractFinder implements IFinder
     public function prepareNodes(array $nodes): array
     {
         return $nodes;
+    }
+
+    public function setPathFile(string $path)
+    {
+        $this->pathFile = $path;
     }
 }

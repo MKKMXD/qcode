@@ -12,6 +12,7 @@ class Finder extends AbstractFinder
 
         foreach ($this->elements as $element)
         {
+            $element->setPathFile($this->pathFile);
             $result[] = $element->search($stmts);
         }
 
