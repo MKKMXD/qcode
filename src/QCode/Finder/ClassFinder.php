@@ -15,13 +15,11 @@ final class ClassFinder extends AbstractFinder
     {
         $value = parent::prepareNode($value);
         $value['content'] = str_replace(array("{", "}", "\n"), "", $value['content']);
-        $cmd = "cd " . WORK_DIR . " && \"C:\Program Files\Git\bin\git\" log " . $this->pathFile;
+        $cmd = "cd " . WORK_DIR . " && \"C:\Program Files\Git\bin\git\" log --pretty=oneline --abbrev-commit " . $this->pathFile;
         $output = [];
-        var_dump(exec($cmd, $output, $code));
-        $startIndex = 4;
-        $addToIndex = 6;
+        exec($cmd, $output, $code);
         $contentCommit = [];
-        for ($i = $startIndex; $i < count($output); $i+=6) {
+        for ($i = 0; $i < count($output); $i++) {
             $contentCommit[] = new CommitsElement(['content' => $output[$i]]);
         }
         $value['commits'] = new GroupElement([
