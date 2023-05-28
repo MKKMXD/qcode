@@ -6,19 +6,25 @@ use PhpParser\NodeFinder;
 use QCode\Elements\ClassDependencyElement;
 use QCode\Elements\ClassElement;
 use QCode\Elements\GroupClassElement;
+use QCode\Elements\GroupElement;
 
 final class ClassesFinder extends AbstractFinder
 {
     protected string $nodeName = \PhpParser\Node\Expr\New_::class;
-    protected string $element = \QCode\Elements\GroupClassElement::class;
 
-    protected function prepareNode(string $value)
-    {
-        return new ClassDependencyElement([$value]); 
+    public function prepareNode($value)
+    {   
+        $value = parent::prepareNode($value);
+        $value = new ClassDependencyElement($value);
+
+        return $value;
     }
 
     public function prepareNodes(array $nodes): array
     {
-        return [new GroupClassElement($nodes)]; 
+        $nodes = new GroupElement([
+            'title' => "Dependency classes",
+            'content' => $nodes]);
+        return [$nodes];
     }
 }

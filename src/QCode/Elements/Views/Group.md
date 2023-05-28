@@ -1,2 +1,2 @@
-## {group_name}
+## {title}
 {content}

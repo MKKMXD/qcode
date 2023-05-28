@@ -14,8 +14,14 @@ abstract class Element
 
     protected Render $render;
 
+    protected bool $isEmpty = false;
+
     public function __construct(array $values)
     {
+        if (empty($values['content'])) {
+            $this->isEmpty = true;
+        }
+
         $this->values = $values;
         $this->render = new Render();
     }

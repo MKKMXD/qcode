@@ -2,6 +2,7 @@
 namespace QCode\Finder;
 use PhpParser\NodeFinder;
 use PhpParser\PrettyPrinter\Standard;
+use QCode\Elements\CommentElement;
 use Qcode\Elements\Element;
 
 abstract class AbstractFinder implements IFinder
@@ -54,7 +55,7 @@ abstract class AbstractFinder implements IFinder
         $prettyPrinter = new Standard;
         
         return [
-            'comment' => $comment->getText(),
+            'comment' => ($comment ? new CommentElement(['content' => $comment->getText()]) : ""),
             'content' => $prettyPrinter->prettyPrint([$value]),
         ];
     }

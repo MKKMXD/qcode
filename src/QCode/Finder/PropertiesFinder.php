@@ -2,6 +2,7 @@
 
 namespace QCode\Finder;
 
+use QCode\Elements\GroupElement;
 use QCode\Elements\PropertyElement;
 use QCode\Elements\GroupPropertiesElement;
 
@@ -9,15 +10,19 @@ final class PropertiesFinder extends AbstractFinder
 {
     protected string $nodeName = \PhpParser\Node\Stmt\Property::class;
 
-    protected string $element = \QCode\Elements\GroupElement::class;
+    public function prepareNode($value)
+    {   
+        $value = parent::prepareNode($value);
+        $value = new PropertyElement($value);
 
-    protected function prepareNode(string $value)
-    {
-        return new PropertyElement([$value]);
+        return $value;
     }
 
     public function prepareNodes(array $nodes): array
     {
-        return [new GroupPropertiesElement($nodes)]; 
+        $nodes = new GroupElement([
+            'title' => "Properties",
+            'content' => $nodes]);
+        return [$nodes];
     }
 }
